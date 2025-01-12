@@ -11,5 +11,5 @@ Este projeto busca a cotação do dólar em relação ao real brasileiro (USD/BR
 
 
 ## Licença
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICESE.txt) para mais detalhes.
 
