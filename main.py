@@ -89,7 +89,7 @@ def post_to_fb():
     fuso_horario = timezone(timedelta(hours=-3))
     data_e_hora_atuais = datetime.now(fuso_horario).strftime("%d/%m/%Y %H:%M:%S")
 
-    message = (f"Horário da postagem: {data_e_hora_atuais}\n\n"
+    message = (f"Data da postagem: {data_e_hora_atuais}\n\n"
            "Esta informação é fornecida exclusivamente para fins educacionais. "
            "Não nos responsabilizamos pela precisão ou uso das informações fornecidas.")
     try:
