@@ -55,6 +55,7 @@ def create_image(value: str, created_date: str = ""):
             "-annotate", "00, 00, -190, +140", value,
             "images/output.png"]
         , check=True)
+        
     except subprocess.CalledProcessError as e:
         print(f"Erro ao executar o comando ImageMagick: {e}")
     except Exception as e:
@@ -89,9 +90,8 @@ def post_to_fb():
     fuso_horario = timezone(timedelta(hours=-3))
     data_e_hora_atuais = datetime.now(fuso_horario).strftime("%d/%m/%Y %H:%M:%S")
 
-    message = (f"Data da postagem: {data_e_hora_atuais}\n\n"
-           "Esta informação é fornecida exclusivamente para fins educacionais. "
-           "Não nos responsabilizamos pela precisão ou uso das informações fornecidas.")
+    message = f"Data da postagem: {data_e_hora_atuais}"
+
     try:
         with open("images/output.png", "rb") as f:
             image = f.read()
@@ -100,7 +100,6 @@ def post_to_fb():
                 "https://graph.facebook.com/v21.0/me/photos",
                 params={
                     "message": message,
-                    
                     "access_token": token
                 },
                 files={"source": image}

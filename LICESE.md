@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [ano] [nome do autor]
+Copyright (c) 2025 [JavaRaf](https://github.com/JavaRaf)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
