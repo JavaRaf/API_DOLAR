@@ -22,9 +22,12 @@ class Currency:
     create_date: str
 
 def create_image(value: str, created_date: str = ""):
+
+    command = 'magick' if os.name == 'nt' else 'convert'
+
     try:
         subprocess.run(
-            ["magick", "images/base.png",
+            [command, "images/base.png",
             "-gravity", "center",
             "-pointsize", "50",
             "-font", "fonts/sans-bold.ttf",
@@ -34,7 +37,7 @@ def create_image(value: str, created_date: str = ""):
         , check=True)
 
         subprocess.run(
-            ["magick", "images/output.png",
+            [command, "images/output.png",
             "-gravity", "center",
             "-pointsize", "20",
             "-font", "fonts/sans-normal.ttf",
@@ -44,7 +47,7 @@ def create_image(value: str, created_date: str = ""):
         , check=True)
 
         subprocess.run(
-            ["magick", "images/output.png",
+            [command, "images/output.png",
             "-gravity", "center",
             "-pointsize", "28",
             "-font", "fonts/sans-normal.ttf",
