@@ -3,7 +3,7 @@ name: init
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "0 12 * * *" # 09:00 Brasilia
 
     
 permissions:
@@ -16,6 +16,7 @@ jobs:
 
     env:
       FB_TOKEN: ${{ secrets.FB_TOKEN }}
+      API_LAYER_TOKEN: ${{ secrets.API_LAYER_TOKEN }}
 
     steps:
       - name: Cache pip

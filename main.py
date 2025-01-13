@@ -68,7 +68,7 @@ def get_currency_ApiLayer() -> Currency:
         "to": "BRL",
         "from": "USD",
         "amount": 1,
-        "apikey": getenv("LAYER_KEY")
+        "apikey": getenv("API_LAYER_TOKEN")
         }
 
         response = requests.get(api_layer_url, params=params, timeout=10, allow_redirects=True)
@@ -96,7 +96,7 @@ def get_currency_awesome() -> Currency:
         response.raise_for_status()
         data = response.json()
         currency = Currency(
-            high=data["USDBRL"]["high"],
+            high=data["USDBRL"]["bid"],
             timestamp=data["USDBRL"]["timestamp"],
             service_name="AwesomeAPI"
         )
