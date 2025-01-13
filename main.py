@@ -6,22 +6,23 @@ import os
 from datetime import datetime, timezone, timedelta
 
 awsome_api_url = "https://economia.awesomeapi.com.br/last/USD-BRL"
+api_layer_url = "https://api.apilayer.com/currency_data/convert"
 
 @dataclass
 class Currency:
-    code: str
-    codein: str
-    name: str
-    high: str
-    low: str
-    varBid: str
-    pctChange: str
-    bid: str
-    ask: str
-    timestamp: str
-    create_date: str
+    code: str = ""
+    codein: str = ""
+    name: str = ""
+    high: str = ""
+    low: str = ""
+    varBid: str = ""
+    pctChange: str = ""
+    bid: str = ""
+    ask: str = ""
+    timestamp: str = ""
+    service_name: str = ""
 
-def create_image(value: str, created_date: str = ""):
+def create_image(value: str, timestamp: str = "", service_name: str = ""):
 
     command = 'magick' if os.name == 'nt' else 'convert'
 
@@ -42,7 +43,7 @@ def create_image(value: str, created_date: str = ""):
             "-pointsize", "20",
             "-font", "fonts/sans-normal.ttf",
             "-fill", "white",
-            "-annotate", "00, 00, -35, -40", f"{created_date}. UTC - fonte: AwesomeAPI",
+            "-annotate", "00, 00, -35, -40", f"{datetime.fromtimestamp(float(timestamp))} - BRT - fonte: {service_name}",
             "images/output.png"]
         , check=True)
 
@@ -61,20 +62,60 @@ def create_image(value: str, created_date: str = ""):
     except Exception as e:
         print(f"Erro inesperado: {e}")
 
-def get_currency() -> Currency:
+def get_currency_ApiLayer() -> Currency:
     try:
-        response = requests.get(awsome_api_url, timeout=10)
-        response.raise_for_status()
+        params = {
+        "to": "BRL",
+        "from": "USD",
+        "amount": 1,
+        "apikey": getenv("LAYER_KEY")
+        }
+
+        response = requests.get(api_layer_url, params=params, timeout=10, allow_redirects=True)
+        
+        if response.status_code != 200:
+            print(f"Erro ao buscar os dados da API: {response.status_code}")
+            return None
+        
         data = response.json()
-        return Currency(**data["USDBRL"])
+
+        currency = Currency(
+            high=data["result"],
+            timestamp=data["info"]["timestamp"],
+            service_name="APiLayer"
+        )
+        return currency
+            
     except requests.RequestException as e:
         print(f"Erro ao buscar os dados da API: {e}")
         raise
 
+def get_currency_awesome() -> Currency:
+    try:
+        response = requests.get(awsome_api_url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        currency = Currency(
+            high=data["USDBRL"]["high"],
+            timestamp=data["USDBRL"]["timestamp"],
+            service_name="AwesomeAPI"
+        )
+        return currency
+    except requests.RequestException as e:
+        print(f"Erro ao buscar os dados da API: {e}")
+        raise
+
+def get_currency() -> Currency:
+    currency = get_currency_ApiLayer()
+    if currency is None:
+        currency = get_currency_awesome()
+    return currency
+
 def save_currency(currency: Currency):
     os.makedirs("history", exist_ok=True)
     with open("history/prices.txt", "a", encoding="utf-8") as f:  # Certifique-se da codificação correta
-        f.write(f"Maior valor: {currency.high} - Data_criação (UTC): {currency.create_date}\n")
+        f.write(f"Maior valor: {currency.high} - Data_criação (UTC): {datetime.fromtimestamp(float(currency.timestamp))}\n")
+
 def save_log_fb(post_id: str):
     os.makedirs("history", exist_ok=True)
     with open("history/fb_log.txt", "a") as f:
@@ -117,7 +158,7 @@ def main():
         print(f"Moeda obtida: {currency}")
 
         print("Criando imagem...")
-        create_image(f"{float(currency.high):.2f}", currency.create_date)
+        create_image(f"{float(currency.high):.2f}", currency.timestamp, currency.service_name)
 
         print("Postando no Facebook...")
         post_id = post_to_fb()
