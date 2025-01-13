@@ -10,17 +10,9 @@ api_layer_url = "https://api.apilayer.com/currency_data/convert"
 
 @dataclass
 class Currency:
-    code: str = ""
-    codein: str = ""
-    name: str = ""
-    high: str = ""
-    low: str = ""
-    varBid: str = ""
-    pctChange: str = ""
-    bid: str = ""
-    ask: str = ""
-    timestamp: str = ""
-    service_name: str = ""
+    price: str
+    timestamp: str
+    service_name: str
 
 def create_image(value: str, timestamp: str = "", service_name: str = ""):
 
@@ -78,11 +70,10 @@ def get_currency_ApiLayer() -> Currency:
             return None
         
         data = response.json()
-
         currency = Currency(
-            high=data["result"],
+            price=data["result"],
             timestamp=data["info"]["timestamp"],
-            service_name="APiLayer"
+            service_name="APiLayer"  
         )
         return currency
             
@@ -96,7 +87,7 @@ def get_currency_awesome() -> Currency:
         response.raise_for_status()
         data = response.json()
         currency = Currency(
-            high=data["USDBRL"]["bid"],
+            price=data["USDBRL"]["bid"],
             timestamp=data["USDBRL"]["timestamp"],
             service_name="AwesomeAPI"
         )
@@ -158,7 +149,7 @@ def main():
         print(f"Moeda obtida: {currency}")
 
         print("Criando imagem...")
-        create_image(f"{float(currency.high):.2f}", currency.timestamp, currency.service_name)
+        create_image(f"{float(currency.price):.2f}", currency.timestamp, currency.service_name)
 
         print("Postando no Facebook...")
         post_id = post_to_fb()
