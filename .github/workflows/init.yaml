@@ -3,7 +3,7 @@ name: init
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 12 * * *" # 09:00 Brasilia
+    - cron: "0 9 * * *" # 06:00 horario de Brasilia
 
     
 permissions:
