@@ -17,6 +17,8 @@ class Currency:
 def create_image(value: str, timestamp: str = "", service_name: str = ""):
 
     command = 'magick' if os.name == 'nt' else 'convert'
+    data_e_hora_atuais = datetime.fromtimestamp(float(timestamp), timezone(timedelta(hours=-3)))
+    
 
     try:
         subprocess.run(
@@ -35,7 +37,7 @@ def create_image(value: str, timestamp: str = "", service_name: str = ""):
             "-pointsize", "20",
             "-font", "fonts/sans-normal.ttf",
             "-fill", "white",
-            "-annotate", "00, 00, -35, -40", f"{datetime.fromtimestamp(float(timestamp))} - BRT - fonte: {service_name}",
+            "-annotate", "00, 00, -35, -40", f"{data_e_hora_atuais} - BR - fonte: {service_name}",
             "images/output.png"]
         , check=True)
 
