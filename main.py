@@ -165,6 +165,19 @@ def save_log_fb(post_id: str) -> None:
         f.write(f"https://facebook.com/{post_id}\n")
     logger.info("Log do Facebook salvo com sucesso")
 
+def save_currency_to_file(currency: Currency) -> None:
+    """
+    Salva as informações da cotação em arquivo.
+    
+    Args:
+        currency (Currency): Objeto com informações da cotação
+    """
+    logger.info("Salvando informações da cotação")
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    with open(PRICES_FILE, "a", encoding="utf-8") as f:
+        f.write(f"Valor: {currency.price} - Data_criação (BR): {datetime.now(timezone(timedelta(hours=-3))).strftime('%d/%m/%Y %H:%M:%S')}\n")
+    logger.info("Informações da cotação salvas com sucesso")
+
 def post_to_fb() -> str | None:
     token = getenv("FB_TOKEN")
     if token is None:
