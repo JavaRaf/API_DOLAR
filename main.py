@@ -1,125 +1,175 @@
-from dataclasses import dataclass
-import requests
-import subprocess
-from os import getenv
+# Imports da biblioteca padrão
 import os
+from os import getenv
 from datetime import datetime, timezone, timedelta
+from dataclasses import dataclass, field
+import subprocess
+import logging
+from logging.handlers import RotatingFileHandler
 
-awsome_api_url = "https://economia.awesomeapi.com.br/last/USD-BRL"
-api_layer_url = "https://api.apilayer.com/currency_data/convert"
+# Imports de bibliotecas de terceiros
+import requests
+from bs4 import BeautifulSoup
+
+# Imports locais
+from config import *
+
+# Configuração do logger com rotação de arquivos
+handler = RotatingFileHandler(
+    filename="app.log",
+    maxBytes=1024 * 1024,  # 1MB por arquivo
+    backupCount=5,  # Mantém até 5 arquivos de backup
+    encoding="utf-8"
+)
+handler.setFormatter(logging.Formatter(
+    "%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+))
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
 
 @dataclass
 class Currency:
+    """
+    Classe para armazenar informações de cotação de moeda.
+    
+    Attributes:
+        price (str): Valor da cotação
+        timestamp (str): Timestamp da cotação
+        service_name (str): Nome do serviço que forneceu a cotação
+    """
     price: str
-    timestamp: str
     service_name: str
 
-def create_image(value: str, timestamp: str = "", service_name: str = ""):
-
-    command = 'magick' if os.name == 'nt' else 'convert'
-    data_e_hora_atuais = datetime.fromtimestamp(float(timestamp), timezone(timedelta(hours=-3)))
+def create_image(value: str, service_name: str = "") -> None:
+    """
+    Cria uma imagem com informações da cotação usando ImageMagick.
     
-
+    Args:
+        value (str): Valor da cotação
+        timestamp (str): Timestamp da cotação
+        service_name (str): Nome do serviço
+    """
+    logger.debug(f"Iniciando criação da imagem com valor {value}")
+    command = 'magick' if os.name == 'nt' else 'convert'
+    data_e_hora_atuais = datetime.now(timezone(timedelta(hours=-3))).strftime("%Y-%m-%d %H:%M:%S")
+    
     try:
         subprocess.run(
-            [command, "images/base.png",
+            [command, IMAGE_BASE,
             "-gravity", "center",
             "-pointsize", "50",
             "-font", "fonts/sans-bold.ttf",
             "-fill", "white",
             "-annotate", "00, 00, -210, -100", value,
-            "images/output.png"]
+            IMAGE_OUTPUT]
         , check=True)
 
         subprocess.run(
-            [command, "images/output.png",
+            [command, IMAGE_OUTPUT,
             "-gravity", "center",
             "-pointsize", "20",
             "-font", "fonts/sans-normal.ttf",
             "-fill", "white",
             "-annotate", "00, 00, -35, -40", f"{data_e_hora_atuais} - BR - fonte: {service_name}",
-            "images/output.png"]
+            IMAGE_OUTPUT]
         , check=True)
 
         subprocess.run(
-            [command, "images/output.png",
+            [command, IMAGE_OUTPUT,
             "-gravity", "center",
             "-pointsize", "28",
             "-font", "fonts/sans-normal.ttf",
             "-fill", "white",
             "-annotate", "00, 00, -190, +140", value,
-            "images/output.png"]
+            IMAGE_OUTPUT]
         , check=True)
         
+        logger.info("Imagem criada com sucesso")
     except subprocess.CalledProcessError as e:
-        print(f"Erro ao executar o comando ImageMagick: {e}")
+        logger.error(f"Erro ao executar o comando ImageMagick: {e}")
+        raise
     except Exception as e:
-        print(f"Erro inesperado: {e}")
-
-def get_currency_ApiLayer() -> Currency:
-    try:
-        params = {
-        "to": "BRL",
-        "from": "USD",
-        "amount": 1,
-        "apikey": getenv("API_LAYER_TOKEN")
-        }
-
-        response = requests.get(api_layer_url, params=params, timeout=10, allow_redirects=True)
-        
-        if response.status_code != 200:
-            print(f"Erro ao buscar os dados da API: {response.status_code}")
-            return None
-        
-        data = response.json()
-        currency = Currency(
-            price=data["result"],
-            timestamp=data["info"]["timestamp"],
-            service_name="APiLayer"  
-        )
-        return currency
-            
-    except requests.RequestException as e:
-        print(f"Erro ao buscar os dados da API: {e}")
+        logger.error(f"Erro inesperado na criação da imagem: {e}")
         raise
 
-def get_currency_awesome() -> Currency:
-    try:
-        response = requests.get(awsome_api_url, timeout=10)
-        response.raise_for_status()
-        data = response.json()
-        currency = Currency(
-            price=data["USDBRL"]["bid"],
-            timestamp=data["USDBRL"]["timestamp"],
-            service_name="AwesomeAPI"
-        )
-        return currency
-    except requests.RequestException as e:
-        print(f"Erro ao buscar os dados da API: {e}")
-        raise
-
-def get_currency() -> Currency:
-    currency = get_currency_ApiLayer()
-    if currency is None:
-        currency = get_currency_awesome()
-    return currency
-
-def save_currency(currency: Currency):
-    os.makedirs("history", exist_ok=True)
-    with open("history/prices.txt", "a", encoding="utf-8") as f:  # Certifique-se da codificação correta
-        f.write(f"Maior valor: {currency.high} - Data_criação (UTC): {datetime.fromtimestamp(float(currency.timestamp))}\n")
-
-def save_log_fb(post_id: str):
-    os.makedirs("history", exist_ok=True)
-    with open("history/fb_log.txt", "a") as f:
-        f.write(f"https://facebook.com/{post_id}\n")
-
-def post_to_fb():
+def get_currency_wise() -> Currency:
+    """
+    Obtém a cotação do dólar através do Wise.
     
+    Returns:
+        Currency: Objeto com informações da cotação
+    
+    Raises:
+        requests.RequestException: Erro na requisição
+        ValueError: Erro no processamento dos dados
+    """
+    logger.debug("Iniciando busca de cotação no Wise")
+    user_agent = (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko)"
+        "Chrome/131.0.0.0 Safari/537.36"
+    )
+    headers = {"User-Agent": user_agent}
+    
+    try:
+        response = requests.get(
+            WISE_URL,
+            headers=headers,
+            timeout=20,
+        )
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, "html.parser")
+        value = soup.find("input", {"id": "target-input"})
+        
+        if value is None:
+            logger.error("Elemento de valor não encontrado na página")
+            raise ValueError("Elemento de valor não encontrado na página")
+        
+        logger.info(f"Cotação Wise obtida: {value.get('value')}")
+        return Currency(
+            price=float(value.get("value", 0).replace(",", ".")),
+            service_name="wise.com"
+        )
+        
+    except (requests.RequestException, ValueError) as e:
+        logger.error(f"Erro ao obter taxa de câmbio do Wise: {str(e)}")
+        raise
+
+def save_currency(currency: Currency) -> None:
+    """
+    Salva as informações da cotação em arquivo.
+    
+    Args:
+        currency (Currency): Objeto com informações da cotação
+    """
+    logger.info("Salvando informações da cotação")
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    with open(PRICES_FILE, "a", encoding="utf-8") as f:
+        f.write(f"Valor: {currency.price} - Data_criação (UTC): {datetime.fromtimestamp(float(currency.timestamp))}\n")
+    logger.info("Informações da cotação salvas com sucesso")
+
+def save_log_fb(post_id: str) -> None:
+    """
+    Salva o ID do post do Facebook em arquivo.
+    
+    Args:
+        post_id (str): ID do post criado no Facebook
+    """
+    logger.info(f"Salvando log do Facebook para post {post_id}")
+    os.makedirs(HISTORY_DIR, exist_ok=True)
+    with open(FB_LOG_FILE, "a") as f:
+        f.write(f"https://facebook.com/{post_id}\n")
+    logger.info("Log do Facebook salvo com sucesso")
+
+def post_to_fb() -> str | None:
     token = getenv("FB_TOKEN")
     if token is None:
         print("Erro: Variável de ambiente 'FB_TOKEN' não definida.")
-        return
+        return None
     
     fuso_horario = timezone(timedelta(hours=-3))
     data_e_hora_atuais = datetime.now(fuso_horario).strftime("%d/%m/%Y %H:%M:%S")
@@ -127,7 +177,7 @@ def post_to_fb():
     message = f"Data da postagem: {data_e_hora_atuais}"
 
     try:
-        with open("images/output.png", "rb") as f:
+        with open(IMAGE_OUTPUT, "rb") as f:
             image = f.read()
 
             response = requests.post(
@@ -147,11 +197,16 @@ def post_to_fb():
 def main():
     try:
         print("Buscando informações de moeda...")
-        currency = get_currency()
+        currency = get_currency_wise()
         print(f"Moeda obtida: {currency}")
 
+    except Exception as e:
+        logger.error(f"Erro ao buscar os dados da API: {e}")
+        print(f"Erro ao buscar os dados da API: {e}")
+
+    try:    
         print("Criando imagem...")
-        create_image(f"{float(currency.price):.2f}", currency.timestamp, currency.service_name)
+        create_image(f"{float(currency.price):.2f}", currency.service_name)
 
         print("Postando no Facebook...")
         post_id = post_to_fb()
