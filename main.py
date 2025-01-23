@@ -2,7 +2,7 @@
 import os
 from os import getenv
 from datetime import datetime, timezone, timedelta
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import subprocess
 import logging
 from logging.handlers import RotatingFileHandler

@@ -6,7 +6,7 @@ on:
     # Horários no formato cron (UTC)
     - cron: '0 9 * * *'   # Executa às 6:00   Brasilia
     - cron: '0 15 * * *'  # Executa às 12:00  Brasilia
-
+    - cron: '0 00 * * *'  # Executa às 21:00  Brasilia
     
 permissions:
   contents: write
@@ -18,7 +18,6 @@ jobs:
 
     env:
       FB_TOKEN: ${{ secrets.FB_TOKEN }}
-      API_LAYER_TOKEN: ${{ secrets.API_LAYER_TOKEN }}
 
     steps:
       - name: Cache pip
