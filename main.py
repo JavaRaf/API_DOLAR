@@ -96,19 +96,6 @@ def create_image(value: str, service_name: str = "") -> None:
         logger.error(f"Erro inesperado na criação da imagem: {e}")
         raise
 
-def save_currency(currency: Currency) -> None:
-    """
-    Salva as informações da cotação em arquivo.
-    
-    Args:
-        currency (Currency): Objeto com informações da cotação
-    """
-    logger.info("Salvando informações da cotação")
-    os.makedirs(HISTORY_DIR, exist_ok=True)
-    with open(PRICES_FILE, "a", encoding="utf-8") as f:
-        f.write(f"Valor: {currency.price} - Data_criação (UTC): {datetime.fromtimestamp(float(currency.timestamp))}\n")
-    logger.info("Informações da cotação salvas com sucesso")
-
 def save_log_fb(post_id: str) -> None:
     """
     Salva o ID do post do Facebook em arquivo.
@@ -198,7 +185,7 @@ def main():
         if post_id is not None:
             print(f"Post criado com sucesso. ID: {post_id}")
             save_log_fb(post_id)
-            save_currency(currency)
+            save_currency_to_file(currency)
 
     except Exception as e:
         print(f"Erro no fluxo principal: {e}")
