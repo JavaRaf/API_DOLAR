@@ -1,7 +1,7 @@
 # URLs das APIs
 AWESOME_API_URL = "https://economia.awesomeapi.com.br/last/USD-BRL"
-API_LAYER_URL = "https://api.apilayer.com/currency_data/convert"
 WISE_URL = "https://wise.com/br/currency-converter/usd-to-brl-rate?amount=1"
+DOLAR_HOJE_URL = "https://www.dolarhoje.com/"
 
 # Caminhos de arquivo
 HISTORY_DIR = "history"

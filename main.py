@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import subprocess
 import logging
 from logging.handlers import RotatingFileHandler
+from get_currency import GetCurrency
 
 # Imports de bibliotecas de terceiros
 import requests
@@ -95,50 +96,6 @@ def create_image(value: str, service_name: str = "") -> None:
         logger.error(f"Erro inesperado na criação da imagem: {e}")
         raise
 
-def get_currency_wise() -> Currency:
-    """
-    Obtém a cotação do dólar através do Wise.
-    
-    Returns:
-        Currency: Objeto com informações da cotação
-    
-    Raises:
-        requests.RequestException: Erro na requisição
-        ValueError: Erro no processamento dos dados
-    """
-    logger.debug("Iniciando busca de cotação no Wise")
-    user_agent = (
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 (KHTML, like Gecko)"
-        "Chrome/131.0.0.0 Safari/537.36"
-    )
-    headers = {"User-Agent": user_agent}
-    
-    try:
-        response = requests.get(
-            WISE_URL,
-            headers=headers,
-            timeout=20,
-        )
-        response.raise_for_status()
-        
-        soup = BeautifulSoup(response.text, "html.parser")
-        value = soup.find("input", {"id": "target-input"})
-        
-        if value is None:
-            logger.error("Elemento de valor não encontrado na página")
-            raise ValueError("Elemento de valor não encontrado na página")
-        
-        logger.info(f"Cotação Wise obtida: {value.get('value')}")
-        return Currency(
-            price=float(value.get("value", 0).replace(",", ".")),
-            service_name="wise.com"
-        )
-        
-    except (requests.RequestException, ValueError) as e:
-        logger.error(f"Erro ao obter taxa de câmbio do Wise: {str(e)}")
-        raise
-
 def save_currency(currency: Currency) -> None:
     """
     Salva as informações da cotação em arquivo.
@@ -209,9 +166,23 @@ def post_to_fb() -> str | None:
 
 def main():
     try:
-        print("Buscando informações de moeda...")
-        currency = get_currency_wise()
-        print(f"Moeda obtida: {currency}")
+        currency_value = None  # Inicializa como None para melhor clareza
+
+        for currency in [
+            GetCurrency().get_currency_dolarhoje(),
+            GetCurrency().get_currency_wise(),
+            GetCurrency().get_currency_awesome()
+        ]:
+            if currency is not None and currency.price > 0:
+                currency_value = currency
+                break
+
+        if currency_value is None:
+            logger.error("Nenhuma cotação válida encontrada")
+            print("Nenhuma cotação válida encontrada")
+            return
+
+        print(f"Moeda obtida: {currency_value.price}, {currency_value.service_name}")
 
     except Exception as e:
         logger.error(f"Erro ao buscar os dados da API: {e}")
