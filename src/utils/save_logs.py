@@ -1,9 +1,11 @@
 import os
-from src.set_logger import logger
-from get_currency import Currency
-from src.config import HISTORY_DIR, FB_LOG_FILE, PRICES_FILE
 import datetime
 from datetime import timezone, timedelta
+
+from src.set_logger import logger
+from src.get_currency import Currency
+from src.config import HISTORY_DIR, FB_LOG_FILE, PRICES_FILE
+
 
 
 def save_log_fb(post_id: str) -> None:

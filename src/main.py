@@ -1,12 +1,10 @@
-
-
 # Imports locais
 from src.config import *
 from src.get_currency import GetCurrency, Currency
 from src.set_logger import logger
-from utils.image_creator import create_image
-from utils.save_logs import save_log_fb, save_currency_log
-from utils.facebook import post_to_fb
+from src.utils.image_creator import create_image
+from src.utils.save_logs import save_log_fb, save_currency_log
+from src.utils.facebook import post_to_fb
 
 
 

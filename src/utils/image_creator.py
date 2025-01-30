@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timezone, timedelta
 import subprocess
 from src.set_logger import logger
+from src.config import IMAGE_BASE, IMAGE_OUTPUT
 
 def create_image(value: str, service_name: str = "") -> None:
     """
