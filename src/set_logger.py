@@ -16,4 +16,4 @@ handler.setFormatter(logging.Formatter(
 
 logger = logging.getLogger(__name__)
 logger.addHandler(handler)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.ERROR)
