@@ -1,7 +1,24 @@
-from config import *
-from main import Currency, logger
+from src.config import *
 import requests
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
+
+from src.set_logger import logger
+
+
+
+@dataclass
+class Currency:
+    """
+    Classe para armazenar informações de cotação de moeda.
+    
+    Attributes:
+        price (str): Valor da cotação
+        timestamp (str): Timestamp da cotação
+        service_name (str): Nome do serviço que forneceu a cotação
+    """
+    price: str
+    service_name: str
 
 class GetCurrency(Currency):
 
@@ -77,8 +94,3 @@ class GetCurrency(Currency):
             price=float(value.get("value", 0).replace(",", ".")),
             service_name="wise.com"
         )
-
-
-
-
-
