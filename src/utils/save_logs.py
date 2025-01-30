@@ -1,6 +1,6 @@
 import os
 import datetime
-from datetime import timezone, timedelta
+from datetime import datetime, timezone, timedelta
 
 from src.set_logger import logger
 from src.get_currency import Currency
