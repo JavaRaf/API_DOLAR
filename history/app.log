@@ -1,0 +1,7 @@
+30/01/2025 02:44:58 - INFO - Cotação DolarHoje obtida: 5,85
+30/01/2025 02:44:58 - INFO - Cotação Wise obtida: 5,86
+30/01/2025 02:44:58 - INFO - Cotação AwesomeAPI obtida: 5.8563
+30/01/2025 02:44:59 - ERROR - Erro ao criar imagem: Command '['convert', 'images/output.png', '-gravity', 'center', '-pointsize', '20', '-annotate', '00, 00, 0, 100', '2025-01-29 23:44:58', 'images/output.png']' returned non-zero exit status 1.
+30/01/2025 02:45:02 - INFO - Salvando log do Facebook para post 628561596371761
+30/01/2025 02:45:02 - INFO - Log do Facebook salvo com sucesso
+30/01/2025 02:45:02 - INFO - Salvando informações da cotação
