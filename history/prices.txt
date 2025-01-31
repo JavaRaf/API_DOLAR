@@ -3,3 +3,4 @@ Valor: 5.85 - Data_criação (BR): 30/01/2025 00:32:50
 Valor: 5.85 - Data_criação (BR): 30/01/2025 06:13:44
 Valor: 5.9 - Data_criação (BR): 30/01/2025 12:13:38
 Valor: 5.87 - Data_criação (BR): 30/01/2025 22:36:49
+Valor: 5.87 - Data_criação (BR): 31/01/2025 06:13:52
