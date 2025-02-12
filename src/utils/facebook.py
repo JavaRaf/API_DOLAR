@@ -5,9 +5,6 @@ from src.config import IMAGE_OUTPUT
 
 
 
-
-
-
 def post_to_fb() -> str | None:
     token = getenv("FB_TOKEN")
     if token is None:

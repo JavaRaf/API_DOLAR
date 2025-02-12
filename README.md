@@ -2,6 +2,11 @@
 
 Este projeto busca a cotação do dólar em relação ao real brasileiro (USD/BRL) usando o web scraping, cria uma imagem com a cotação e a data, e faz um post dessa imagem em uma página do Facebook. Ele também registra as informações da cotação em arquivos de log.
 
+
+<p align="center">
+  <img src="./images/base.png" width="300px">
+</p>
+
 ## Funcionalidade
 
 1. **Obter cotação do dólar**: O código busca os dados mais recentes sobre a cotação USD/BRL.
