@@ -121,3 +121,4 @@ Valor: 5.8 - Data_criação (BR): 11/03/2025 22:42:47
 Valor: 5.8 - Data_criação (BR): 12/03/2025 06:15:33
 Valor: 5.81 - Data_criação (BR): 12/03/2025 12:15:54
 Valor: 5.79 - Data_criação (BR): 12/03/2025 22:44:41
+Valor: 5.79 - Data_criação (BR): 13/03/2025 06:15:33
