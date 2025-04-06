@@ -194,3 +194,4 @@ Valor: 5.84 - Data_criação (BR): 05/04/2025 06:13:39
 Valor: 5.84 - Data_criação (BR): 05/04/2025 12:13:09
 Valor: 5.84 - Data_criação (BR): 05/04/2025 22:52:10
 Valor: 5.84 - Data_criação (BR): 06/04/2025 06:13:29
+Valor: 5.84 - Data_criação (BR): 06/04/2025 12:13:09
