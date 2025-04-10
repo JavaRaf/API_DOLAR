@@ -205,3 +205,4 @@ Valor: 6.0 - Data_criação (BR): 08/04/2025 22:47:19
 Valor: 6.0 - Data_criação (BR): 09/04/2025 06:16:20
 Valor: 6.06 - Data_criação (BR): 09/04/2025 12:18:27
 Valor: 5.83 - Data_criação (BR): 09/04/2025 22:47:21
+Valor: 5.83 - Data_criação (BR): 10/04/2025 06:16:06
