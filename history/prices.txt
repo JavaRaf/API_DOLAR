@@ -245,3 +245,4 @@ Valor: 5.8 - Data_criação (BR): 22/04/2025 06:16:29
 Valor: 5.75 - Data_criação (BR): 22/04/2025 12:15:47
 Valor: 5.72 - Data_criação (BR): 22/04/2025 22:49:35
 Valor: 5.72 - Data_criação (BR): 23/04/2025 06:16:18
+Valor: 5.69 - Data_criação (BR): 23/04/2025 12:16:41
