@@ -310,3 +310,4 @@ Valor: 5.6 - Data_criação (BR): 13/05/2025 22:53:12
 Valor: 5.6 - Data_criação (BR): 14/05/2025 06:16:24
 Valor: 5.61 - Data_criação (BR): 14/05/2025 12:16:25
 Valor: 5.63 - Data_criação (BR): 14/05/2025 22:51:28
+Valor: 5.63 - Data_criação (BR): 15/05/2025 06:16:33
