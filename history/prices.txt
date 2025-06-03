@@ -368,3 +368,4 @@ Valor: 5.72 - Data_criação (BR): 02/06/2025 06:17:35
 Valor: 5.69 - Data_criação (BR): 02/06/2025 12:17:23
 Valor: 5.67 - Data_criação (BR): 02/06/2025 22:56:57
 Valor: 5.67 - Data_criação (BR): 03/06/2025 06:17:19
+Valor: 5.64 - Data_criação (BR): 03/06/2025 12:18:15
