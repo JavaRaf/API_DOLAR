@@ -590,3 +590,4 @@ Valor: 5.39 - Data_criação (BR): 15/08/2025 22:54:40
 Valor: 5.39 - Data_criação (BR): 16/08/2025 06:15:18
 Valor: 5.39 - Data_criação (BR): 16/08/2025 12:14:13
 Valor: 5.39 - Data_criação (BR): 16/08/2025 23:06:11
+Valor: 5.39 - Data_criação (BR): 17/08/2025 06:15:14
