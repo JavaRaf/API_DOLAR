@@ -627,3 +627,4 @@ Valor: 5.42 - Data_criação (BR): 28/08/2025 06:16:14
 Valor: 5.4 - Data_criação (BR): 28/08/2025 12:15:43
 Valor: 5.4 - Data_criação (BR): 28/08/2025 22:47:59
 Valor: 5.4 - Data_criação (BR): 29/08/2025 06:15:59
+Valor: 5.43 - Data_criação (BR): 29/08/2025 12:13:31
