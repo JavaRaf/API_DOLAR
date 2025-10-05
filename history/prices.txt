@@ -678,3 +678,4 @@ Valor: 5.35 - Data_criação (BR): 03/10/2025 12:14:26
 Valor: 5.34 - Data_criação (BR): 03/10/2025 22:40:13
 Valor: 5.34 - Data_criação (BR): 04/10/2025 06:13:15
 Valor: 5.34 - Data_criação (BR): 04/10/2025 12:13:08
+Valor: 5.34 - Data_criação (BR): 04/10/2025 22:53:55
