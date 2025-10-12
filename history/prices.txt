@@ -699,3 +699,4 @@ Valor: 5.45 - Data_criação (BR): 10/10/2025 12:15:10
 Valor: 5.5 - Data_criação (BR): 10/10/2025 22:41:35
 Valor: 5.5 - Data_criação (BR): 11/10/2025 06:13:27
 Valor: 5.5 - Data_criação (BR): 11/10/2025 12:12:33
+Valor: 5.5 - Data_criação (BR): 11/10/2025 22:49:18
