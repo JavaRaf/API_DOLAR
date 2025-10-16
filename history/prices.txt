@@ -712,3 +712,4 @@ Valor: 5.47 - Data_criação (BR): 14/10/2025 22:48:55
 Valor: 5.47 - Data_criação (BR): 15/10/2025 06:16:42
 Valor: 5.43 - Data_criação (BR): 15/10/2025 12:15:19
 Valor: 5.44 - Data_criação (BR): 15/10/2025 22:47:56
+Valor: 5.44 - Data_criação (BR): 16/10/2025 06:17:03
